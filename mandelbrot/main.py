@@ -1,9 +1,15 @@
+#!/usr/bin/python3
 import tkinter as tk
 import pygame as pg
 import sys
 import calculate
 
 def get_settings():
+    """
+    Generates a GUI to collect basic generation settings.
+    Sets default values for any entries that are not filled.
+    """
+
     menu = tk.Tk()
     tk_rgb = "#%02x%02x%02x" % (128, 192, 200)
     menu.title('Mandelbrot Settings')
@@ -44,7 +50,8 @@ def get_settings():
         miny_field, maxy_field]
 
     generate_status = tk.Label(menu, text='Waiting...', background=tk_rgb)
-    generate_button = tk.Button(menu, text='Generate Set', command=lambda: start_gen(entries, generate_status))
+    generate_button = tk.Button(menu, text='Generate Set', 
+                                command=lambda: start_gen(entries, generate_status))
 
     # TODO: Find less stupid way to do this
     width_label.grid(row=1, column=0)
@@ -65,6 +72,7 @@ def get_settings():
     menu.mainloop()
 
 def zoom(mouse_x, mouse_y, width, height, zoom_x, zoom_y):
+    # TODO: FIX ZOOM WHEN RECT OFF-SCREEN
     start_x = mouse_x - zoom_x
     end_x = mouse_x + zoom_x
     start_y = mouse_y - zoom_y
@@ -118,8 +126,8 @@ def pg_window(width, height):
                 pg_window(width, height)
                 
         zoom_rect = pg.Rect((0,0), (zoom_x * 2 + 1, zoom_y * 2 + 1))
-        # zoom variables are the distance from mouse point to edge of rect
-        # Multiplying each zoom by 2 and adding 1 gives the rect its size
+        # zoom variables are the distance from mouse position to edge of rect
+        # Multiplying each variable by 2 and adding 1 gives the rect its size
         zoom_rect.center = pg.mouse.get_pos()
         
         window.fill(fill_color)

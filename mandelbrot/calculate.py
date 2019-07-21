@@ -15,18 +15,27 @@ serial_port = None
 # 3 = Job Completed
 
 @jit
-def calculate(x, y):
+def calculate(x, y): # Self explanatory
 	complex_value = complex(x, y)
 	z = 0
-	for i in range(50): # TODO: Change from hardcoded value
+	for i in range(60): # TODO: Change from hardcoded value
 		z = z**2 + complex_value
 		if z.real >= 2 or z.real <= -2:
 			return i + 1
 	return -1
 
 def find_points(width, height, min_x, max_x, min_y, max_y):
-	num = 0 # TODO: Fix job status indicator
-	print("True total points: ", width * height)
+	"""
+	Calls the calculate() function on each point.
+
+	Paramters:
+	width, height: dimensions of the image/complex plane
+	min_x, min_y: the minimum x and yi values for the plane
+	max_x, max_y: the maximum x and yi values for the plane
+	"""
+
+	num = 0 # TODO: Fix arduino job status indicator
+	print("True total points: ", width * height) # TODO: Remove unnecessary prints
 	results_txt = open('results.txt', 'w+')
 	
 	write_serial(b'1')
@@ -39,7 +48,7 @@ def find_points(width, height, min_x, max_x, min_y, max_y):
 	current_point = [min_x, min_y]
 	x_point = 1
 	y_point = 1
-	while y_point <= height: # TODO: Fix precision issues
+	while y_point <= height: # TODO: Fix precision issues (Perturbation or store in array)
 		row = []
 		while x_point <= width:
 			point_result = calculate(*current_point)
@@ -62,6 +71,13 @@ def find_points(width, height, min_x, max_x, min_y, max_y):
 	generate.generate_image(int(width), int(height))
     
 def write_serial(char_byte):
+	"""
+	Sends a byte to the specified serial port to be read
+	by an arduino.
+
+	Parameters:
+	char_byte: the character to be sent, must be a bytes like object
+	"""
 	global serial_port
 	if not serial_port:
 		try:

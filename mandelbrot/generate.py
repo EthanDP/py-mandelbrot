@@ -6,6 +6,13 @@ from sys import exc_info
 points = []
 
 def generate_image(width, height):
+    """
+    Generates an image using the points stored in results.txt and
+    color codes it based on the iteration value of each point.
+
+    Parameters:
+    width, height: The requested width and height of the image
+    """
     with open('results.txt', 'r') as f:
         img = Image.new('RGB', (width, height), color='white')
         pic = img.load()
@@ -19,6 +26,7 @@ def generate_image(width, height):
             if x < width:
                 try:
                     pic[x,y] = color_codes[int(point)]
+                    # Assigns each point to a color value stored in the colors.py 
                     x += 1
                 except:
                     x += 1

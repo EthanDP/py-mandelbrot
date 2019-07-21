@@ -1,0 +1,3 @@
+*.png
+results.txt
+__pycache__/

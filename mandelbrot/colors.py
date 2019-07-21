@@ -1,4 +1,6 @@
 # Uses RGB values
+# TODO: Add more color codes for more iterations
+# TODO: Add different color schemes that can be selected from settings GUI
 color_codes = {-1: (0, 0, 0),
     1: (0, 0, 100),
     2: (10, 0, 100),
