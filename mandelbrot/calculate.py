@@ -1,4 +1,3 @@
-from math import isnan
 from numba import jit
 from serial import Serial
 from time import sleep, time
@@ -18,7 +17,7 @@ serial_port = None
 def calculate(x, y): # Self explanatory
 	complex_value = complex(x, y)
 	z = 0
-	for i in range(60): # TODO: Change from hardcoded value
+	for i in range(128): # TODO: Change from hardcoded value
 		z = z**2 + complex_value
 		if z.real >= 2 or z.real <= -2:
 			return i + 1
@@ -34,8 +33,7 @@ def find_points(width, height, min_x, max_x, min_y, max_y):
 	max_x, max_y: the maximum x and yi values for the plane
 	"""
 
-	num = 0 # TODO: Fix arduino job status indicator
-	print("True total points: ", width * height) # TODO: Remove unnecessary prints
+	# TODO: Fix arduino job status indicator
 	results_txt = open('results.txt', 'w+')
 	
 	write_serial(b'1')
@@ -55,7 +53,6 @@ def find_points(width, height, min_x, max_x, min_y, max_y):
 			row.append(f"{point_result},{current_point[0]},{current_point[1]}")
 			current_point[0] += x_step
 			x_point += 1
-			num += 1
 		# TODO: Rewrite arduino progress indicator
 		for point in row:
 			results_txt.write(f"{point}\n")
@@ -64,7 +61,6 @@ def find_points(width, height, min_x, max_x, min_y, max_y):
 		y_point += 1
 		x_point = 1
 	
-	print("Total calculated points: ", num)
 	results_txt.close()
 	write_serial(b'9')
 	write_serial(b'x')
@@ -82,9 +78,10 @@ def write_serial(char_byte):
 	if not serial_port:
 		try:
 			serial_port = Serial('/dev/ttyACM0', 9600)
-			print("ready")
-			sleep(5)
+			print("Found arduino")
+			sleep(3) # Sleeps to give the arduino time to reset
 		except:
 			serial_port = 'x'
+			print("Invalid port")
 	if serial_port != 'x':
 		serial_port.write(char_byte)
